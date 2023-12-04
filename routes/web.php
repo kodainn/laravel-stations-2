@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\MovieContoller;
-use App\Http\Controllers\PracticeController;
 use App\Models\Movie;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\PracticeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +20,4 @@ Route::get('/practice', [PracticeController::class, 'sample']);
 Route::get('/practice2', [PracticeController::class, 'sample2']);
 Route::get('/practice3', [PracticeController::class, 'sample3']);
 Route::get('/getPractice', [PracticeController::class, 'getPractice']);
-Route::get('/movies', [MovieContoller::class, 'index']);
+Route::get('/movies', [MovieController::class, 'index']);
