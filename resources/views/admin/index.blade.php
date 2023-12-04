@@ -7,16 +7,7 @@
     <title>Practice</title>
 </head>
 <body>
-    <form action="{{ route('movies.index') }}" method="get">
-        キーワード:<input type="text" name="keyword"><br>
-        <input type="radio" id="all" name="is_showing" value="2" checked>
-        <label for="all">すべて</label>
-        <input type="radio" id="nowOpen" name="is_showing" value="1">
-        <label for="nowOpen">上映中</label>
-        <input type="radio" id="publicSchedule" name="is_showing" value="0">
-        <label for="publicSchedule">上映予定</label><br>
-        <input type="submit" value="検索">
-    </form>
+    <a href="{{ route('admin.movies.create') }}">登録</a>
     <table>
         <thead>
             <th>映画タイトル</th>
@@ -24,6 +15,10 @@
             <th>公開年</th>
             <th>上映中かどうか</th>
             <th>概要</th>
+            <th>登録日時</th>
+            <th>更新日時</th>
+            <th></th>
+            <th></th>
         </thead>
         <tbody>
             @foreach ($movies as $movie)
@@ -33,10 +28,19 @@
                     <td>{{ $movie->published_year }}</td>
                     <td>{{ $movie->is_showing === 0 ? '上映予定' : '上映中' }}</td>
                     <td>{{ $movie->description }}</td>
+                    <td>{{ $movie->created_at }}</td>
+                    <td>{{ $movie->updated_at }}</td>
+                    <td><a href="{{ route('admin.movies.edit', ['id' => $movie->id]) }}">編集</a></td>
+                    <td>
+                        <form action="{{ route('admin.movies.destroy', ['id' => $movie->id]) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <input type="submit" value="削除" onclick='return confirm("本当に削除しますか？")'>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    {{ $movies->links() }}
 </body>
 </html>

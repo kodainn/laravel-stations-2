@@ -15,8 +15,11 @@ class CreateMoviesTable extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->text('title')->comment('タイトル');
+            $table->text('title')->uniqid();
             $table->text('image_url');
+            $table->integer('published_year');
+            $table->unsignedTinyInteger('is_showing')->default(0);
+            $table->text('description');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateMoviesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movie');
+        Schema::dropIfExists('movies');
     }
 }
