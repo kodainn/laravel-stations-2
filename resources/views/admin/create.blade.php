@@ -18,6 +18,7 @@
         画像URL:<input type="text" name="image_url"><br>
         公開年:<input type="text" name="published_year"><br>
         上映状況:<input type="checkbox" name="is_showing" value="1"><br>
+        ジャンル:<input type="text" name="genre"><br>
         概要:<textarea name="description"></textarea>
         <input type="submit" value="送信">
     </form>

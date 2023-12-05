@@ -7,9 +7,9 @@
     <title>Practice</title>
 </head>
 <body>
-    <form action="{{ route('movies.index') }}" method="get">
+    <form action="{{ route('movie') }}" method="get">
         キーワード:<input type="text" name="keyword"><br>
-        <input type="radio" id="all" name="is_showing" value="2" checked>
+        <input type="radio" id="all" name="is_showing" checked>
         <label for="all">すべて</label>
         <input type="radio" id="nowOpen" name="is_showing" value="1">
         <label for="nowOpen">上映中</label>

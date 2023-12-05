@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\Movie;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Symfony\Component\VarDumper\Caster\RedisCaster;
+use Illuminate\Support\Facades\DB;
+
 
 class MovieAdminController extends Controller
 {
@@ -26,28 +28,50 @@ class MovieAdminController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'title' => 'required|unique:movies',
             'image_url' => 'required|url',
             'published_year' => 'required',
             'is_showing' => 'required',
+            'genre' => 'required',
             'description' => 'required'
         ]);
 
         try {
+            DB::beginTransaction();
             unset($request['_token']);
+
+            $genre = Genre::where('name', '=', $request->genre)->first();
+
+            if(empty($genre)) {
+                Genre::insert([
+                    ['name' => $request->genre]
+                ]);
+
+                $newGenre = Genre::orderBy('id', 'desc')->first();
+                $request['genre_id'] = $newGenre->id;
+                unset($request['genre']);
+                Movie::insert([$request->all()]);
+
+                DB::commit();
+                return  redirect()->route('admin.movies.index');
+            }
+
+            $request['genre_id'] = $genre->id;
+            unset($request['genre']);
             Movie::insert([$request->all()]);
+            DB::commit();
             return redirect()->route('admin.movies.index');
         } catch(Exception $e) {
-            return redirect()
-                    ->route('admin.movies.create')
-                    ->with('flash_message', '登録に失敗しました。');
+            DB::rollBack();
+            abort(500);
         }
     }
 
     public function edit($id)
     {
-        $movie = Movie::where('id', '=', $id)->first();
+        $movie = Movie::with('genre')->where('id', '=', $id)->first();
 
         return view('admin.edit', [
             'movie' => $movie
@@ -56,25 +80,46 @@ class MovieAdminController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'title' => 'required|unique:movies',
             'image_url' => 'required|url',
             'published_year' => 'required',
             'is_showing' => 'required',
+            'genre' => 'required',
             'description' => 'required'
         ]);
 
+
         try {
+            DB::beginTransaction();
+
             unset($request['_token']);
             unset($request['_method']);
+
+            $genre = Genre::where('name', '=', $request->genre)->first();
+
+            if(empty($genre)) {
+                Genre::insert([
+                    ['name' => $request->genre]
+                ]);
+
+                $newGenre = Genre::orderBy('id', 'desc')->first();
+                $request['genre_id'] = $newGenre->id;
+                unset($request['genre']);
+                Movie::where('id', '=', $id)->update($request->all());
+
+                DB::commit();
+                return  redirect()->route('admin.movies.index');
+            }
+
+            $request['genre_id'] = $genre->id;
+            unset($request['genre']);
             Movie::where('id', '=', $id)->update($request->all());
             return redirect()->route('admin.movies.index');
         } catch(Exception $e) {
-            return redirect()
-                    ->route('admin.movies.edit', [
-                        'id' => $id
-                    ])
-                    ->with('flash_message', '更新に失敗しました。');
+            DB::rollBack();
+            abort(500);
         }
     }
 
