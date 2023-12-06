@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movie;
+use App\Models\Schedule;
 use App\Models\Sheet;
 use Illuminate\Http\Request;
+use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 class MovieController extends Controller
 {
@@ -48,6 +50,19 @@ class MovieController extends Controller
 
         return view('sheet', [
             'sheetList' => $sheetList
+        ]);
+    }
+
+
+    public function schedule($id)
+    {
+        $movie = Movie::where('id', '=', $id)->first();
+    
+        $schedules = Schedule::where('movie_id', '=', $id)->orderBy('start_time', 'asc')->get();
+
+        return view('schedule', [
+            'movie' => $movie,
+            'schedules' => $schedules
         ]);
     }
 }

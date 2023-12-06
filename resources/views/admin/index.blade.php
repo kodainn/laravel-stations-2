@@ -19,6 +19,7 @@
             <th>更新日時</th>
             <th></th>
             <th></th>
+            <th></th>
         </thead>
         <tbody>
             @foreach ($movies as $movie)
@@ -30,6 +31,7 @@
                     <td>{{ $movie->description }}</td>
                     <td>{{ $movie->created_at }}</td>
                     <td>{{ $movie->updated_at }}</td>
+                    <td><a href="{{ route('admin.movies.show', ['id' => $movie->id]) }}">詳細</a></td>
                     <td><a href="{{ route('admin.movies.edit', ['id' => $movie->id]) }}">編集</a></td>
                     <td>
                         <form action="{{ route('admin.movies.destroy', ['id' => $movie->id]) }}" method="post">

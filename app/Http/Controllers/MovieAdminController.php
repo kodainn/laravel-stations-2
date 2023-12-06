@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use App\Models\Movie;
+use App\Models\Schedule;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -18,6 +19,17 @@ class MovieAdminController extends Controller
 
         return view('admin.index', [
             'movies' => $movies
+        ]);
+    }
+
+    public function show($id)
+    {
+        $movie = Movie::with('schedules')
+                    ->where('id', '=', $id)
+                    ->first();
+        
+        return view('admin.show', [
+            'movie' => $movie
         ]);
     }
 
@@ -131,6 +143,82 @@ class MovieAdminController extends Controller
             Movie::where('id', '=', $id)->delete();
 
             return redirect()->route('admin.movies.index');
+        } else {
+            return App::abort(404);
+        } 
+    }
+
+    public function scheduleCreate($id)
+    {
+        return  view('admin.schedule.create', [
+            'id' => $id
+        ]);
+    }
+
+    public function scheduleStore(Request $request, $id)
+    {
+        $request->validate([
+            'movie_id' => 'required',
+            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
+            'start_time_time' => 'required|date_format:H:i',
+            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
+            'end_time_time' => 'required|date_format:H:i'
+        ]);
+
+        $start_date_time = $request->start_time_date . ' ' . $request->start_time_time;
+        $end_date_time = $request->end_time_date . ' ' . $request->end_time_time;
+
+        Schedule::insert([
+            [
+                'movie_id' => $id,
+                'start_time' => $start_date_time,
+                'end_time' => $end_date_time
+            ]
+        ]);
+
+        return redirect()->route('admin.movies.show', ['id' => $id]);
+    }
+
+    public function scheduleEdit($id)
+    {
+        $schedule = Schedule::where('id', '=', $id)->first();
+        
+        return view('admin.schedule.edit', [
+            'schedule' => $schedule
+        ]);
+    }
+
+    public function scheduleUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'movie_id' => 'required',
+            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
+            'start_time_time' => 'required|date_format:H:i',
+            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
+            'end_time_time' => 'required|date_format:H:i'
+        ]);
+
+        $start_date_time = $request->start_time_date . ' ' . $request->start_time_time;
+        $end_date_time = $request->end_time_date . ' ' . $request->end_time_time;
+
+        Schedule::where('id' , '=', $id)->update([
+                'movie_id' => $request->movie_id,
+                'start_time' => $start_date_time,
+                'end_time' => $end_date_time
+        ]);
+
+        return redirect()->route('admin.movies.show', ['id' => $request->movie_id]);
+    }
+
+    public function scheduleDestroy($id)
+    {
+
+        $schedule = Schedule::where('id', '=', $id)->first();
+        
+        if(!empty($schedule)) {
+            Schedule::where('id', '=', $id)->delete();
+
+            return redirect()->route('admin.movies.show', ['id' => $schedule->movie_id]);
         } else {
             return App::abort(404);
         } 
