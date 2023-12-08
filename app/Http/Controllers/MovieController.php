@@ -65,4 +65,19 @@ class MovieController extends Controller
             'schedules' => $schedules
         ]);
     }
+
+    public function reservationIndex($movieId, $scheduleId)
+    {
+
+    }
+
+    public function reservationCreate($movieId, $scheduleId)
+    {
+
+    }
+
+    public function reservationStore()
+    {
+        
+    }
 }

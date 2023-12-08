@@ -3,7 +3,6 @@
 use App\Http\Controllers\MovieAdminController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PracticeController;
-use App\Http\Controllers\ScheduleAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +21,15 @@ Route::get('/practice2', [PracticeController::class, 'sample2']);
 Route::get('/practice3', [PracticeController::class, 'sample3']);
 Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 
+Route::prefix('movies')->name('movies.')->group(function() {
+    Route::get('/', [MovieController::class, 'movie'])->name('movies');
+    Route::get('/{id}', [MovieController::class, 'schedule'])->name('schedules');
+    Route::get('{movie_id}/schedules/{schedule_id}/sheets', [MovieController::class, 'reservationIndex'])->name('reservationIndex');
+    Route::get('/{movie_id}/schedules/{schedule_id}/reservations/create', [MovieController::class, 'reservationCreate'])->name('reservationCreate');
+});
+Route::post('/reservations/store', [MovieController::class, 'reservationStore'])->name('reservationStore');
 
-Route::get('/movies', [MovieController::class, 'movie'])->name('movies');
-Route::get('/movies/{id}', [MovieController::class, 'schedule'])->name('schedules');
+
 Route::get('/sheets', [MovieController::class, 'sheet'])->name('sheets');
 
 Route::prefix('admin')->name('admin.')->group(function() {
