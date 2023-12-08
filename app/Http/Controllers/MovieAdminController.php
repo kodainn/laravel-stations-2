@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\Schedule;
@@ -155,22 +157,15 @@ class MovieAdminController extends Controller
         ]);
     }
 
-    public function scheduleStore(Request $request, $id)
+    public function scheduleStore(CreateScheduleRequest $request, $id)
     {
-        $request->validate([
-            'movie_id' => 'required',
-            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
-            'start_time_time' => 'required|date_format:H:i',
-            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
-            'end_time_time' => 'required|date_format:H:i'
-        ]);
 
         $start_date_time = $request->start_time_date . ' ' . $request->start_time_time;
         $end_date_time = $request->end_time_date . ' ' . $request->end_time_time;
 
         Schedule::insert([
             [
-                'movie_id' => $id,
+                'movie_id' => $request->movie_id,
                 'start_time' => $start_date_time,
                 'end_time' => $end_date_time
             ]
@@ -188,15 +183,8 @@ class MovieAdminController extends Controller
         ]);
     }
 
-    public function scheduleUpdate(Request $request, $id)
+    public function scheduleUpdate(UpdateScheduleRequest $request, $id)
     {
-        $request->validate([
-            'movie_id' => 'required',
-            'start_time_date' => 'required|date_format:Y-m-d|before_or_equal:end_time_date',
-            'start_time_time' => 'required|date_format:H:i',
-            'end_time_date' => 'required|date_format:Y-m-d|after_or_equal:start_time_date',
-            'end_time_time' => 'required|date_format:H:i'
-        ]);
 
         $start_date_time = $request->start_time_date . ' ' . $request->start_time_time;
         $end_date_time = $request->end_time_date . ' ' . $request->end_time_time;

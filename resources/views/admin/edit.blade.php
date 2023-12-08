@@ -19,7 +19,7 @@
         画像URL:<input type="text" name="image_url" value="{{ $movie->image_url }}"><br>
         公開年:<input type="text" name="published_year" value="{{ $movie->published_year }}"><br>
         上映状況:<input type="checkbox" name="is_showing" value="1" {{ $movie->is_showing ? 'checked' : '' }} ><br>
-        ジャンル<input type="text" name="genre" value="{{ $movie->genre }}"><br>
+        ジャンル<input type="text" name="genre" value="{{ $movie->genre->name }}"><br>
         概要:<textarea name="description">{{ $movie->description }}</textarea>
         <input type="submit" value="送信">
     </form>

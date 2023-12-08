@@ -7,11 +7,9 @@
     <title>Practice</title>
 </head>
 <body>
-    @if (session('flash_message'))
-        <div class="flash_message">
-            {{ session('flash_message') }}
-        </div>
-    @endif
+    @foreach ($errors->all() as $error)
+        <li>{{$error}}</li>
+    @endforeach
     <form action="{{ route('admin.movies.store') }}" method="post">
         @csrf
         タイトル:<input type="text" name="title"><br>
