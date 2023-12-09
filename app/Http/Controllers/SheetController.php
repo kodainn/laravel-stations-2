@@ -15,13 +15,17 @@ class SheetController extends Controller
             return App::abort(400);
         }
 
-        $sheets = Sheet::all();
+        $sheets = Sheet::with(['reservations' => function($query) use($scheduleId) {
+            $query->where('schedule_id', '=', $scheduleId);
+        }])->get();
+
         $sheetList = [];
 
         foreach($sheets as $sheet) {
             $sheetList[$sheet['row']][] = [
                 'id' => $sheet['id'],
-                'name' => $sheet['row'] . '-' . $sheet['column']
+                'name' => $sheet['row'] . '-' . $sheet['column'],
+                'is_reservation' => !empty($sheet->reservations[0]) ? true : false
             ];
         }
 

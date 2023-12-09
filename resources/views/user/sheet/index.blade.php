@@ -23,12 +23,17 @@
                 <tr>
                     @foreach($sheetRow as $sheetCol)
                         <td>
-                            <a href="{{ route('movies.reservations.create', [
-                                'movie_id' => $movie_id,
-                                'schedule_id' => $schedule_id
-                            ]) . '?date=' . $date .'&sheetId='. $sheetCol['id'] }}">
+                            @if($sheetCol['is_reservation'])
                                 {{ $sheetCol['name'] }}
-                            </a>
+                            @else
+                                <a href="{{ route('movies.reservations.create', [
+                                    'movie_id' => $movie_id,
+                                    'schedule_id' => $schedule_id
+                                    ]) . '?date=' . $date .'&sheetId='. $sheetCol['id'] }}"
+                                >
+                                    {{ $sheetCol['name'] }}
+                                </a>
+                            @endif
                         </td>
                     @endforeach
                 </tr>

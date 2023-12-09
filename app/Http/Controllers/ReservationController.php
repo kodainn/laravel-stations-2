@@ -18,6 +18,15 @@ class ReservationController extends Controller
             return App::abort(400);
         }
 
+        //クエリパラメータを変えてアクセスしたときに予約済みであったら。
+        $search = [
+            ['schedule_id', '=', $schduleId],
+            ['sheet_id', '=', $request->sheetId]
+        ];
+        if(Reservation::where($search)->exists()) {
+            return App::abort(400);
+        }
+
         return view('user.reservation.create', [
             'movie_id' => $movieId,
             'schedule_id' => $schduleId,
