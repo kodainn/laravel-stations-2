@@ -20,7 +20,7 @@
         @endif
     </div>
     <div>
-        <a href="{{ route('admin.movies.scheduleCreate', ['id' => $movie->id]) }}">作成</a>
+        <a href="{{ route('admin.movies.schedules.create', ['id' => $movie->id]) }}">作成</a>
         <table>
             <thead>
                 <th>上映時間</th>

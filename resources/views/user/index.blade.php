@@ -7,7 +7,7 @@
     <title>Practice</title>
 </head>
 <body>
-    <form action="{{ route('movies') }}" method="get">
+    <form action="{{ route('movies.index') }}" method="get">
         キーワード:<input type="text" name="keyword"><br>
         <input type="radio" id="all" name="is_showing" checked>
         <label for="all">すべて</label>
@@ -34,7 +34,7 @@
                     <td>{{ $movie->published_year }}</td>
                     <td>{{ $movie->is_showing === 0 ? '上映予定' : '上映中' }}</td>
                     <td>{{ $movie->description }}</td>
-                    <td><a href="{{ route('schedules', ['id' => $movie->id]) }}">詳細</a></td>
+                    <td><a href="{{ route('movies.detail', ['id' => $movie->id]) }}">詳細</a></td>
                 </tr>
             @endforeach
         </tbody>

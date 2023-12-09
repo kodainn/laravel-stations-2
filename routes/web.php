@@ -3,6 +3,10 @@
 use App\Http\Controllers\MovieAdminController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PracticeController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SheetController;
+use App\Models\Sheet;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,16 +25,17 @@ Route::get('/practice2', [PracticeController::class, 'sample2']);
 Route::get('/practice3', [PracticeController::class, 'sample3']);
 Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 
+Route::post('/reservations/store', [ReservationController::class, 'store'])->name('reservations.store');
+
 Route::prefix('movies')->name('movies.')->group(function() {
-    Route::get('/', [MovieController::class, 'movie'])->name('movies');
-    Route::get('/{id}', [MovieController::class, 'schedule'])->name('schedules');
-    Route::get('{movie_id}/schedules/{schedule_id}/sheets', [MovieController::class, 'reservationIndex'])->name('reservationIndex');
-    Route::get('/{movie_id}/schedules/{schedule_id}/reservations/create', [MovieController::class, 'reservationCreate'])->name('reservationCreate');
+    Route::get('/', [MovieController::class, 'index'])->name('index');
+    Route::get('/{id}', [MovieController::class, 'detail'])->name('detail');
+    Route::get('{movie_id}/schedules/{schedule_id}/sheets', [SheetController::class, 'index'])->name('sheets.index');
+    Route::get('/{movie_id}/schedules/{schedule_id}/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
 });
-Route::post('/reservations/store', [MovieController::class, 'reservationStore'])->name('reservationStore');
 
 
-Route::get('/sheets', [MovieController::class, 'sheet'])->name('sheets');
+Route::get('/sheets', [SheetController::class, 'sheet'])->name('sheets.index');
 
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::prefix('movies')->name('movies.')->group(function() {
@@ -40,14 +45,14 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/{id}/edit', [MovieAdminController::class, 'edit'])->name('edit');
         Route::patch('/{id}/update', [MovieAdminController::class, 'update'])->name('update');
         Route::delete('/{id}/destroy', [MovieAdminController::class, 'destroy'])->name('destroy');
-        Route::get('/{id}/schedules/create', [MovieAdminController::class, 'scheduleCreate'])->name('scheduleCreate');
-        Route::post('/{id}/schedules/store', [MovieAdminController::class, 'scheduleStore'])->name('scheduleStore');
+        Route::get('/{id}/schedules/create', [ScheduleController::class, 'create'])->name('schedules.create');
+        Route::post('/{id}/schedules/store', [ScheduleController::class, 'store'])->name('schedules.store');
         Route::get('/{id}', [MovieAdminController::class, 'show'])->name('show');
     });
 
     Route::prefix('schedules')->name('schedules.')->group(function() {
-        Route::get('/{id}/edit', [MovieAdminController::class, 'scheduleEdit'])->name('edit');
-        Route::patch('/{id}/update', [MovieAdminController::class, 'scheduleUpdate'])->name('update');
-        Route::delete('{id}/destroy', [MovieAdminController::class, 'scheduleDestroy'])->name('destroy');
+        Route::get('/{id}/edit', [ScheduleController::class, 'edit'])->name('edit');
+        Route::patch('/{id}/update', [ScheduleController::class, 'update'])->name('update');
+        Route::delete('{id}/destroy', [ScheduleController::class, 'destroy'])->name('destroy');
     });
 });

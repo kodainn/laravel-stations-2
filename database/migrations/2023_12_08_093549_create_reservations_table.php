@@ -23,6 +23,7 @@ class CreateReservationsTable extends Migration
             $table->string('email', 255);
             $table->string('name', 255);
             $table->boolean('is_canceled')->default(false);
+            $table->unique(['schedule_id', 'sheet_id']);
             $table->timestamps();
         });
     }

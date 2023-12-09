@@ -19,7 +19,9 @@
             @foreach($sheetList as $sheetRow)
                 <tr>
                     @foreach($sheetRow as $sheetCol)
-                        <td>{{ $sheetCol }}</td>
+                        <td>
+                            {{ $sheetCol['name'] }}
+                        </td>
                     @endforeach
                 </tr>
             @endforeach

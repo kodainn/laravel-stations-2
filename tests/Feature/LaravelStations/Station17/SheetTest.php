@@ -82,6 +82,7 @@ class SheetTest extends TestCase
             'email' => "techbowl@techbowl.com",
             'date' => CarbonImmutable::now()->format('Y-m-d'),
         ]);
+
         $response->assertStatus(302);
         $this->assertReservationCount(1);
     }

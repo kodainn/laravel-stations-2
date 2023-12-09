@@ -10,7 +10,7 @@ use Psy\TabCompletion\Matcher\FunctionsMatcher;
 
 class MovieController extends Controller
 {
-    public function movie(Request $request)
+    public function index(Request $request)
     {
 
         $keyword = $request->input('keyword');
@@ -33,51 +33,21 @@ class MovieController extends Controller
 
         $movies = $query->paginate(20);
 
-        return view('movie', [
+        return view('user.index', [
             'movies' => $movies
         ]);
     }
 
 
-    public function sheet()
-    {
-        $sheets = Sheet::all();
-        $sheetList = [];
-
-        foreach($sheets as $sheet) {
-            $sheetList[$sheet['row']][] = $sheet['row'] . '-' . $sheet['column'];
-        }
-
-        return view('sheet', [
-            'sheetList' => $sheetList
-        ]);
-    }
-
-
-    public function schedule($id)
+    public function detail($id)
     {
         $movie = Movie::where('id', '=', $id)->first();
     
         $schedules = Schedule::where('movie_id', '=', $id)->orderBy('start_time', 'asc')->get();
 
-        return view('schedule', [
+        return view('user.detail', [
             'movie' => $movie,
             'schedules' => $schedules
         ]);
-    }
-
-    public function reservationIndex($movieId, $scheduleId)
-    {
-
-    }
-
-    public function reservationCreate($movieId, $scheduleId)
-    {
-
-    }
-
-    public function reservationStore()
-    {
-        
     }
 }
