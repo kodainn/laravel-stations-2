@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAdminReservationRequest;
+use App\Http\Requests\CreateReservationRequest;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Exception;
@@ -35,7 +36,7 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function store(CreateAdminReservationRequest $request)
+    public function store(CreateReservationRequest $request)
     {
         $search = [
             ['schedule_id', '=', $request->schedule_id],

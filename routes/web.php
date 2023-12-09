@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminReservationController;
 use App\Http\Controllers\MovieAdminController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PracticeController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SheetController;
 use App\Models\Sheet;
 use Illuminate\Support\Facades\Route;
+use Tests\Feature\LaravelStations\Station19\AdminReservationTest;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,5 +56,14 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/{id}/edit', [ScheduleController::class, 'edit'])->name('edit');
         Route::patch('/{id}/update', [ScheduleController::class, 'update'])->name('update');
         Route::delete('{id}/destroy', [ScheduleController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('reservations')->name('reservations.')->group(function() {
+        Route::get('/', [AdminReservationController::class, 'index'])->name('index');
+        Route::get('/create', [AdminReservationController::class, 'create'])->name('create');
+        Route::post('/', [AdminReservationController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [AdminReservationController::class, 'edit'])->name('edit');
+        Route::patch('/{id}', [AdminReservationController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdminReservationController::class, 'destroy'])->name('destroy');
     });
 });

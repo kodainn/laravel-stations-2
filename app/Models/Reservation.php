@@ -17,4 +17,14 @@ class Reservation extends Model
         'name',
         'is_canceled'
     ];
+
+    public function sheet()
+    {
+        return $this->belongsTo(Sheet::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
 }
